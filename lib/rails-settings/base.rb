@@ -15,9 +15,12 @@ module RailsSettings
           if RailsSettings.can_protect_attributes?
             setting_objects.detect do |s|
               s.var == var.to_s
-            end || setting_objects.build({ value: self.class.default_settings[var] }, without_protection: true)
+            end || setting_objects.build({ var: var.to_s, value: self.class.default_settings[var] },
+                                         without_protection: true)
           else
-            setting_objects.detect { |s| s.var == var.to_s } || setting_objects.build( value: self.class.default_settings[var] )
+            setting_objects.detect do |s|
+              s.var == var.to_s
+            end || setting_objects.build(var: var.to_s, value: self.class.default_settings[var])
           end
         end
 
